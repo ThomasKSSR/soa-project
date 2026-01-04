@@ -1,0 +1,13 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Container(api, "API Gateway", "Spring Cloud Gateway")
+
+Component(jwt, "JWT Global Filter", "GlobalFilter", "Validates JWT tokens")
+Component(route, "Route Locator", "Gateway", "Routes requests")
+Component(instance, "Gateway Instance Filter", "Filter", "Adds gateway instance header")
+
+Rel(jwt, route, "Allows / blocks")
+Rel(route, instance, "Adds response header")
+
+@enduml

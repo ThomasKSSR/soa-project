@@ -1,0 +1,19 @@
+@startuml
+actor User
+participant NGINX
+participant "API Gateway" as Gateway
+participant "User Service" as UserService
+
+User -> NGINX: POST /auth/login
+NGINX -> Gateway: Forward request
+Gateway -> UserService: /auth/login
+UserService --> Gateway: JWT Token
+Gateway --> User: 200 OK + JWT
+
+User -> NGINX: GET /api/users/me (JWT)
+NGINX -> Gateway: Forward request
+Gateway -> Gateway: Validate JWT
+Gateway -> UserService: Forward request
+UserService --> Gateway: User data
+Gateway --> User: 200 OK
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+Person(user, "End User", "Uses the web application")
+
+System(system, "SOA Microservices System", "Handles user management and notifications")
+
+System_Ext(kafka, "Kafka", "Event streaming platform")
+System_Ext(rabbitmq, "RabbitMQ", "Message broker")
+
+Rel(user, system, "Uses", "HTTPS/REST")
+Rel(system, kafka, "Publishes / Consumes events")
+Rel(system, rabbitmq, "Sends messages")
+
+@enduml
