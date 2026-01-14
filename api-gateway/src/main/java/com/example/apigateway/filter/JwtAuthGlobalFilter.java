@@ -24,7 +24,6 @@ public class JwtAuthGlobalFilter implements GlobalFilter, Ordered {
 
         String path = exchange.getRequest().getURI().getPath();
 
-        // Public endpoints
         if (path.startsWith("/auth/login") || path.startsWith("/auth/register")) {
             return chain.filter(exchange);
         }
@@ -52,7 +51,7 @@ public class JwtAuthGlobalFilter implements GlobalFilter, Ordered {
 
     @Override
     public int getOrder() {
-        return -1; // before routing
+        return -1;
     }
 }
 

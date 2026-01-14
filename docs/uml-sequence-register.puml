@@ -1,0 +1,46 @@
+@startuml
+title User Registration Flow with RabbitMQ and Kafka
+
+actor User
+participant "Web App" as Web
+participant "API Gateway" as Gateway
+participant "User Service" as UserService
+queue "RabbitMQ" as RabbitMQ
+queue "Kafka Topic" as Kafka
+participant "Notification Service" as NotificationService
+
+User -> Web: Register (username, password)
+Web -> Gateway: POST /auth/register
+Gateway -> UserService: Forward request
+
+activate UserService
+UserService -> UserService: Validate input
+UserService -> UserService: Save user to database
+UserService -> UserService: Generate UserRegisteredEvent
+deactivate UserService
+
+UserService -> RabbitMQ: Publish message (user.created)
+note right of RabbitMQ
+Used for immediate async
+message delivery
+end note
+
+UserService -> Kafka: Publish event (UserRegisteredEvent)
+note right of Kafka
+Used for event streaming,
+audit, and future consumers
+end note
+
+RabbitMQ -> NotificationService: Consume message
+Kafka -> NotificationService: Consume event
+
+activate NotificationService
+NotificationService -> NotificationService: Build notification
+NotificationService -> NotificationService: Send email / push notification
+deactivate NotificationService
+
+UserService --> Gateway: 201 Created
+Gateway --> Web: Registration successful
+Web --> User: Success message
+
+@enduml

@@ -16,10 +16,8 @@ public class GatewayInstanceFilter implements GlobalFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
-        // Log which gateway handled the request
         System.out.println("➡️ Request handled by: " + gatewayId);
 
-        // Add response header (VISIBLE IN POSTMAN)
         exchange.getResponse()
                 .getHeaders()
                 .add("X-Gateway-Instance", gatewayId);

@@ -62,6 +62,9 @@ public class AuthController {
 
     @GetMapping("/whoami")
     public String whoAmI() {
+        publisher.userRegistered("user1");
+
+        kafkaProducer.publishUserRegistered("user1");
         return "Handled by port " + port;
     }
 
